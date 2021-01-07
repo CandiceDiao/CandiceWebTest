@@ -4,7 +4,12 @@ from page.main_page import MainPage
 class TestAddMember():
 
     def setup_class(self):
+        # # 使用复用浏览器
+        # self.main = MainPage(True)
+        # 使用浏览器
         self.main = MainPage()
+        #加载cookie
+        self.main.add_cookie()
 
     def test_add_member(self):
 
