@@ -1,7 +1,5 @@
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-
 from page.add_member_page import AddMember
 from page.base_page import BasePage
 from page.contact_page import Contact
@@ -18,6 +16,7 @@ class MainPage(BasePage):
 
     def goto_add_member(self):
         #点击添加成员；进入通讯录页面
+        self.wait_for_element_to_be_clickable(By.CSS_SELECTOR, ".index_service_cnt_itemWrap:nth-child(1)")
         self.find(By.CSS_SELECTOR,'.index_service_cnt_itemWrap:nth-child(1)').click()
 
         #添加通讯录页面打开的显示等待

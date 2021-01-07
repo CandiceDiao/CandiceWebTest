@@ -1,30 +1,31 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-
-# BasePage定义，它是一个其他page的公共方法的封装，它是一个底层使用的框架
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-
+# BasePage定义，它是一个其他page的公共方法的封装，它是一个底层使用的框架
 class BasePage():
-    _base_url= ""
+    _base_url = ""
 
-    def __init__(self,driver_basepage:WebDriver = None):
-    #def __init__(self, driver_basepage = None):
-        self.driver = None
-        if driver_basepage == None:
-            #浏览器复用
-            option = Options()
-            option.debugger_address = "localhost:9222"
-            self.driver = webdriver.Chrome(options=option)
-            # self.driver.get("https://work.weixin.qq.com/wework_admin/frame#index")
+    # 参数中的driver要指定类型，python才能识别
+    def __init__(self, driver:WebDriver=None,reuse=False):
+        #让python编译器知道有一个实例变量：driver
+        self.driver=None
+        if driver is None and reuse == True:
+            # 如果发现driver是空，reuse标志位为True->就复用已有的浏览器
+            opts = webdriver.ChromeOptions()
+            opts.debugger_address = "127.0.0.1:9222"
+            self.driver = webdriver.Chrome(options=opts)
+        elif driver is None and reuse == False:
+            # 如果发现driver是空，reuse标志位为False->new chrome driver
+            self.driver = webdriver.Chrome()
         else:
-            self.driver = driver_basepage
+            # 如果发现driver不为空时，无需再次创建
+            self.driver=driver
 
-        if self._base_url !="":
+        if self._base_url != "":
             self.driver.get(self._base_url)
-        #添加隐式等待
+        # 隐式等待，解决元素加载过慢的问题
         self.driver.implicitly_wait(3)
 
     def find(self,by,value):
